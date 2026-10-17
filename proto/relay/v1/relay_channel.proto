@@ -1,0 +1,65 @@
+syntax = "proto3";
+
+package cs.im.relay.v1;
+
+import "google/protobuf/struct.proto";
+
+option go_package = "github.com/kurosann/cs-im-internal-sdk/relay/v1;relayv1";
+
+service RelayChannelService {
+  rpc CreateChannel(CreateChannelRequest) returns (ChannelResponse);
+  rpc ListChannels(ListChannelsRequest) returns (ListChannelsResponse);
+  rpc GetChannel(GetChannelRequest) returns (ChannelResponse);
+  rpc UpdateChannel(UpdateChannelRequest) returns (ChannelResponse);
+  rpc SetChannelStatus(SetChannelStatusRequest) returns (ChannelResponse);
+  rpc TestChannel(TestChannelRequest) returns (ChannelResponse);
+}
+
+message Channel {
+  string channel_id = 1;
+  string name = 2;
+  string type = 3;
+  string endpoint = 4;
+  map<string, google.protobuf.Value> config = 5;
+  string status = 6;
+  string last_tested_at = 7;
+  string created_at = 8;
+  string updated_at = 9;
+}
+
+message CreateChannelRequest {
+  string name = 1;
+  string type = 2;
+  string endpoint = 3;
+  map<string, google.protobuf.Value> config = 4;
+}
+
+message ListChannelsRequest {}
+
+message ListChannelsResponse {
+  repeated Channel items = 1;
+}
+
+message GetChannelRequest {
+  string channel_id = 1;
+}
+
+message UpdateChannelRequest {
+  string channel_id = 1;
+  string name = 2;
+  string endpoint = 3;
+  map<string, google.protobuf.Value> config = 4;
+}
+
+message SetChannelStatusRequest {
+  string channel_id = 1;
+  bool enabled = 2;
+}
+
+message TestChannelRequest {
+  string channel_id = 1;
+}
+
+message ChannelResponse {
+  Channel channel = 1;
+}
