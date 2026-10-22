@@ -1,5 +1,4 @@
 syntax = "proto3";
-
 package cs.im.relay.v1;
 
 option go_package = "github.com/kurosann/cs-im-internal-sdk/relay/v1;relayv1";
@@ -8,6 +7,31 @@ service RelayAccessService {
   rpc SendRelayMessage(SendRelayMessageRequest) returns (RelayMessageResponse);
   rpc ListRelayMessages(ListRelayMessagesRequest) returns (ListRelayMessagesResponse);
   rpc StreamRelayMessages(StreamRelayMessagesRequest) returns (stream RelayMessageEventResponse);
+}
+
+service RelayEmployeeService {
+  rpc ListEmployees(RelayEmployeeListRequest) returns (RelayEmployeeListResponse);
+  rpc CreateEmployee(RelayEmployeeCreateRequest) returns (RelayEmployeeResponse);
+  rpc UpdateEmployee(RelayEmployeeUpdateRequest) returns (RelayEmployeeResponse);
+  rpc DeleteEmployee(RelayEmployeeDeleteRequest) returns (RelayEmployeeDeleteResponse);
+  rpc ListEmployeeExecutions(RelayEmployeeExecutionListRequest) returns (RelayEmployeeExecutionListResponse);
+  rpc ListEmployeeChannels(RelayEmployeeChannelListRequest) returns (RelayEmployeeChannelListResponse);
+}
+
+service RelayWebhookService {
+  rpc CreateWebhook(RelayWebhookCreateRequest) returns (RelayWebhookResponse);
+  rpc ListWebhooks(RelayWebhookListRequest) returns (RelayWebhookListResponse);
+  rpc GetWebhook(RelayWebhookGetRequest) returns (RelayWebhookResponse);
+  rpc UpdateWebhook(RelayWebhookUpdateRequest) returns (RelayWebhookResponse);
+  rpc TestWebhook(RelayWebhookTestRequest) returns (RelayWebhookResponse);
+  rpc SetWebhookStatus(RelayWebhookSetStatusRequest) returns (RelayWebhookResponse);
+  rpc DeleteWebhook(RelayWebhookDeleteRequest) returns (RelayWebhookDeleteResponse);
+}
+
+service RelayAIService {
+  rpc GetAIConfig(RelayGetAIConfigRequest) returns (RelayAIConfigResponse);
+  rpc UpdateAIConfig(RelayUpdateAIConfigRequest) returns (RelayAIConfigResponse);
+  rpc ListAIExecutions(RelayAIExecutionListRequest) returns (RelayAIExecutionListResponse);
 }
 
 message RelayMessageSender {
@@ -75,4 +99,199 @@ message StreamRelayMessagesRequest {}
 message RelayMessageEventResponse {
   string event_type = 1;
   RelayMessage message = 2;
+}
+
+message RelayChannelBinding {
+  string platform = 1;
+  string label = 2;
+}
+
+message RelayEmployee {
+  string employee_id = 1;
+  string name = 2;
+  string persona = 3;
+  string status = 4;
+  string mode = 5;
+  string prompt = 6;
+  int32 history = 7;
+  bool auto_reply = 8;
+  repeated string selected_doc_ids = 9;
+  repeated string tools = 10;
+  repeated RelayChannelBinding channels = 11;
+}
+
+message RelayEmployeeListRequest {}
+
+message RelayEmployeeListResponse {
+  repeated RelayEmployee items = 1;
+}
+
+message RelayEmployeeCreateRequest {
+  string name = 1;
+}
+
+message RelayEmployeeResponse {
+  RelayEmployee employee = 1;
+}
+
+message RelayEmployeeUpdateRequest {
+  string employee_id = 1;
+  string name = 2;
+  string persona = 3;
+  string status = 4;
+  string mode = 5;
+  string prompt = 6;
+  int32 history = 7;
+  bool auto_reply = 8;
+  repeated string selected_doc_ids = 9;
+  repeated string tools = 10;
+  repeated RelayChannelBinding channels = 11;
+}
+
+message RelayEmployeeDeleteRequest {
+  string employee_id = 1;
+}
+
+message RelayEmployeeDeleteResponse {}
+
+message RelayEmployeeExecution {
+  string id = 1;
+  string employee_id = 2;
+  string employee_name = 3;
+  string platform = 4;
+  string account_key = 5;
+  string account_display_name = 6;
+  string profile_id = 7;
+  string peer_id = 8;
+  string conversation_id = 9;
+  string peer_display_name = 10;
+  repeated string message_ids = 11;
+  string merged_text = 12;
+  int32 history_count = 13;
+  bool history_available = 14;
+  bool history_truncated = 15;
+  string history_diagnostics_status = 16;
+  int64 history_diagnostics_requested_count = 17;
+  int64 history_diagnostics_read_count = 18;
+  int64 history_diagnostics_pages = 19;
+  int64 history_diagnostics_scanned_count = 20;
+  string history_diagnostics_error = 21;
+  string status = 22;
+  string action = 23;
+  string reason_code = 24;
+  string reason = 25;
+  string reply_text = 26;
+  int32 prompt_tokens = 27;
+  int32 completion_tokens = 28;
+  int32 total_tokens = 29;
+  string result = 30;
+  string error = 31;
+  int64 created_at = 32;
+  int64 updated_at = 33;
+  int64 completed_at = 34;
+}
+
+message RelayEmployeeExecutionListRequest {
+  string employee_id = 1;
+  int32 limit = 2;
+}
+
+message RelayEmployeeExecutionListResponse {
+  repeated RelayEmployeeExecution items = 1;
+}
+
+message RelayEmployeeChannelListRequest {}
+
+message RelayEmployeeChannelListResponse {
+  repeated RelayChannelBinding items = 1;
+}
+
+message RelayWebhook {
+  string webhook_id = 1;
+  string name = 2;
+  string url = 3;
+  repeated string events = 4;
+  string secret = 5;
+  string status = 6;
+  string created_at = 7;
+  string updated_at = 8;
+}
+
+message RelayWebhookCreateRequest {
+  string name = 1;
+  string url = 2;
+  repeated string events = 3;
+  bool is_active = 4;
+}
+
+message RelayWebhookListRequest {}
+
+message RelayWebhookListResponse {
+  repeated RelayWebhook items = 1;
+}
+
+message RelayWebhookGetRequest {
+  string webhook_id = 1;
+}
+
+message RelayWebhookResponse {
+  RelayWebhook webhook = 1;
+}
+
+message RelayWebhookUpdateRequest {
+  string webhook_id = 1;
+  string name = 2;
+  string url = 3;
+  repeated string events = 4;
+  bool is_active = 5;
+}
+
+message RelayWebhookTestRequest {
+  string webhook_id = 1;
+}
+
+message RelayWebhookSetStatusRequest {
+  string webhook_id = 1;
+  bool enabled = 2;
+}
+
+message RelayWebhookDeleteRequest {
+  string webhook_id = 1;
+}
+
+message RelayWebhookDeleteResponse {}
+
+message RelayAIConfig {
+  string prompt = 1;
+  int32 history_message_count = 2;
+  bool auto_reply_enabled = 3;
+  bool reporting_enabled = 4;
+}
+
+message RelayGetAIConfigRequest {}
+
+message RelayAIConfigResponse {
+  RelayAIConfig config = 1;
+}
+
+message RelayUpdateAIConfigRequest {
+  string prompt = 1;
+  int32 history_message_count = 2;
+  bool auto_reply_enabled = 3;
+  bool reporting_enabled = 4;
+}
+
+message RelayAIExecution {
+  string execution_id = 1;
+  string conversation_id = 2;
+  string message_id = 3;
+  string action = 4;
+  string result = 5;
+  string created_at = 6;
+}
+
+message RelayAIExecutionListRequest {}
+
+message RelayAIExecutionListResponse {
+  repeated RelayAIExecution items = 1;
 }

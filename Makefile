@@ -7,9 +7,7 @@ proto:
 		--go-grpc_out=. \
 		--go-grpc_opt=module=github.com/kurosann/cs-im-internal-sdk \
 		proto/relay/v1/relay_channel.proto \
-		proto/relay/v1/relay_access.proto \
-		proto/relay/v1/relay_admin.proto \
-		proto/relay/v1/relay_employee.proto
+		proto/relay/v1/relay_access.proto
 
 test:
 	go test ./...
