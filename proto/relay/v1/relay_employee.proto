@@ -1,0 +1,119 @@
+syntax = "proto3";
+
+package cs.im.relay.v1;
+
+option go_package = "github.com/kurosann/cs-im-internal-sdk/relay/v1;relayv1";
+
+service RelayEmployeeService {
+  rpc ListEmployees(RelayEmployeeListRequest) returns (RelayEmployeeListResponse);
+  rpc CreateEmployee(RelayEmployeeCreateRequest) returns (RelayEmployeeResponse);
+  rpc UpdateEmployee(RelayEmployeeUpdateRequest) returns (RelayEmployeeResponse);
+  rpc DeleteEmployee(RelayEmployeeDeleteRequest) returns (RelayEmployeeDeleteResponse);
+  rpc ListEmployeeExecutions(RelayEmployeeExecutionListRequest) returns (RelayEmployeeExecutionListResponse);
+  rpc ListEmployeeChannels(RelayEmployeeChannelListRequest) returns (RelayEmployeeChannelListResponse);
+}
+
+message RelayChannelBinding {
+  string platform = 1;
+  string label = 2;
+}
+
+message RelayEmployee {
+  string employee_id = 1;
+  string name = 2;
+  string persona = 3;
+  string status = 4;
+  string mode = 5;
+  string prompt = 6;
+  int32 history = 7;
+  bool auto_reply = 8;
+  repeated string selected_doc_ids = 9;
+  repeated string tools = 10;
+  repeated RelayChannelBinding channels = 11;
+}
+
+message RelayEmployeeExecution {
+  string id = 1;
+  string employee_id = 2;
+  string employee_name = 3;
+  string platform = 4;
+  string account_key = 5;
+  string account_display_name = 6;
+  string profile_id = 7;
+  string peer_id = 8;
+  string conversation_id = 9;
+  string peer_display_name = 10;
+  repeated string message_ids = 11;
+  string merged_text = 12;
+  int32 history_count = 13;
+  bool history_available = 14;
+  bool history_truncated = 15;
+  string status = 16;
+  string action = 17;
+  string reason_code = 18;
+  string reason = 19;
+  string reply_text = 20;
+  int32 prompt_tokens = 21;
+  int32 completion_tokens = 22;
+  int32 total_tokens = 23;
+  string result = 24;
+  string error = 25;
+  int64 created_at = 26;
+  int64 updated_at = 27;
+  int64 completed_at = 28;
+  string history_diagnostics_status = 29;
+  int64 history_diagnostics_requested_count = 30;
+  int64 history_diagnostics_read_count = 31;
+  int64 history_diagnostics_pages = 32;
+  int64 history_diagnostics_scanned_count = 33;
+  string history_diagnostics_error = 34;
+}
+
+message RelayEmployeeListRequest {}
+
+message RelayEmployeeListResponse {
+  repeated RelayEmployee items = 1;
+}
+
+message RelayEmployeeCreateRequest {
+  string name = 1;
+}
+
+message RelayEmployeeResponse {
+  RelayEmployee employee = 1;
+}
+
+message RelayEmployeeUpdateRequest {
+  string employee_id = 1;
+  string name = 2;
+  string persona = 3;
+  string status = 4;
+  string mode = 5;
+  string prompt = 6;
+  int32 history = 7;
+  bool auto_reply = 8;
+  repeated string selected_doc_ids = 9;
+  repeated string tools = 10;
+  repeated RelayChannelBinding channels = 11;
+}
+
+message RelayEmployeeDeleteRequest {
+  string employee_id = 1;
+}
+
+message RelayEmployeeDeleteResponse {}
+
+message RelayEmployeeExecutionListRequest {
+  string employee_id = 1;
+  int32 limit = 2;
+}
+
+message RelayEmployeeExecutionListResponse {
+  repeated RelayEmployeeExecution items = 1;
+}
+
+message RelayEmployeeChannelListRequest {}
+
+message RelayEmployeeChannelListResponse {
+  repeated RelayChannelBinding items = 1;
+}

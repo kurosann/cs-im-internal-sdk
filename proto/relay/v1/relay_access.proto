@@ -1,0 +1,78 @@
+syntax = "proto3";
+
+package cs.im.relay.v1;
+
+option go_package = "github.com/kurosann/cs-im-internal-sdk/relay/v1;relayv1";
+
+service RelayAccessService {
+  rpc SendRelayMessage(SendRelayMessageRequest) returns (RelayMessageResponse);
+  rpc ListRelayMessages(ListRelayMessagesRequest) returns (ListRelayMessagesResponse);
+  rpc StreamRelayMessages(StreamRelayMessagesRequest) returns (stream RelayMessageEventResponse);
+}
+
+message RelayMessageSender {
+  string role = 1;
+  string id = 2;
+}
+
+message RelayMessageContent {
+  string url = 1;
+  string mime_type = 2;
+  string file_name = 3;
+  int64 size = 4;
+  int32 width = 5;
+  int32 height = 6;
+  int32 duration_seconds = 7;
+  string thumbnail_url = 8;
+  string checksum = 9;
+}
+
+message RelayMessage {
+  string message_id = 1;
+  int64 seq = 2;
+  string conversation_id = 3;
+  string customer_id = 4;
+  RelayMessageSender sender = 5;
+  string type = 6;
+  string text = 7;
+  RelayMessageContent content = 8;
+  string status = 9;
+  string received_at = 10;
+  string created_at = 11;
+  string updated_at = 12;
+}
+
+message SendRelayMessageRequest {
+  string conversation_id = 1;
+  string customer_id = 2;
+  RelayMessageSender sender = 3;
+  string type = 4;
+  string text = 5;
+  RelayMessageContent content = 6;
+}
+
+message RelayMessageResponse {
+  RelayMessage message = 1;
+}
+
+message ListRelayMessagesRequest {
+  string conversation_id = 1;
+  int64 after_seq = 2;
+  int64 before_seq = 3;
+  int32 limit = 4;
+  string order = 5;
+}
+
+message ListRelayMessagesResponse {
+  repeated RelayMessage items = 1;
+  int64 next_after_seq = 2;
+  int64 next_before_seq = 3;
+  bool has_more = 4;
+}
+
+message StreamRelayMessagesRequest {}
+
+message RelayMessageEventResponse {
+  string event_type = 1;
+  RelayMessage message = 2;
+}
